@@ -26,7 +26,7 @@ public class MongoResourceLoadTest {
 
 	private ResourceSet resourceSet;
 	private MongoClient client;
-	private URI testURI = URI.createURI("mongodb://localhost:27017/emfjson-test/models/model1");
+	private URI testURI = URI.createURI("mongodb://localhost:27017/emfjson-test/model/model1.json");
 	private MongoHandler handler;
 
 	@Before

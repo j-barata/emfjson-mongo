@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 
 public class MongoHandler {
 

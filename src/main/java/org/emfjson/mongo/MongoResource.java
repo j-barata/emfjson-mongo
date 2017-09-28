@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
@@ -79,11 +80,12 @@ public class MongoResource extends ResourceImpl {
 		}
 
 		@SuppressWarnings("unchecked")
-		List<ObjectId> contents = (List<ObjectId>) document.get("contents");
-		FindIterable<Document> documents = collection.find(new Document("_id", new Document("$in", contents)));
+		
+		FindIterable<Document> documents = collection.find(new Document("eResource", document.get("_id")));
 
 		Map<EObject, Map<EReference, List<ObjectId>>> resolving = new HashMap<>();
-
+		
+		documents.forEach((Consumer<Document>) e -> System.out.println(e));
 		documents.forEach((Consumer<Document>) e -> getContents().add(fromDocument(collection, e, resolving)));
 
 		resolving.forEach(((object, map) ->
@@ -111,7 +113,7 @@ public class MongoResource extends ResourceImpl {
 
 		Document resourceDoc = new Document("eClass", "EResource")
 				.append("uri", uriOf(this));
-
+		
 		collection.insertOne(resourceDoc);
 
 		ObjectId resourceID = id = resourceDoc.getObjectId(ID_FIELD);
@@ -183,12 +185,15 @@ public class MongoResource extends ResourceImpl {
 	private Document asDocument(EObject object) {
 		Document document = new Document("eClass", uriOf(object.eClass()))
 				.append("eResource", uriOf(object.eResource()));
-
 		object.eClass().getEAllAttributes()
 				.forEach(attribute -> {
 					if (object.eIsSet(attribute)) {
 						if (!attribute.isMany()) {
-							document.append(attribute.getName(), object.eGet(attribute));
+							if (attribute.getEAttributeType() instanceof EEnum){
+								document.append(attribute.getName(), object.eGet(attribute).toString());
+							}else{
+								document.append(attribute.getName(), object.eGet(attribute));
+							}
 						}
 					} else {
 						document.append(attribute.getName(), null);

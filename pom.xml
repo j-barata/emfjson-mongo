@@ -59,6 +59,12 @@
 			<artifactId>emfjson-jackson</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+	
+		<!-- dependency>
+			<groupId>com.gk-software.emfjson</groupId>
+			<artifactId>emfjson-jackson</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency -->
 
 		<dependency>
 			<groupId>org.mongodb</groupId>
